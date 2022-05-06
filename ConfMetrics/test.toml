@@ -1,0 +1,78 @@
+# this is a TOML document
+title = "测试"
+[owner]
+create_date = "2022-05-04"
+doc = """指标配置文件"""
+
+[andromeda.metrics]
+atom_metrics = [
+    {metric_id = "100000", column_name = "test", alias_name = "test", desc = "描述", enable = true}
+]
+
+[andromeda.map]
+
+# 配置依据子组件作为独立的配置（组件 id+子组件 id 作为唯一 key）
+[[andromeda.map.components]]
+annotation="测试-组件"
+component_id="test_id"
+
+# left-join，可以不配
+left_joins = [
+    {relate_table="a", relate_key="id", current_key="user_id", relate_field="field"}
+]
+
+static_sql = false
+seq_time = ""
+
+# 可以不配，如果明细数据必须配置
+dimension = ""
+order_by = ""
+
+# 组件内，原子指标配置
+atom_metrics_map = [
+    {metric_id = "100000", func = "sum"}
+]
+
+# 如果static_sql=true必须配置sql指标表，别名，统一使用a，不允许多指标的left-join，只能针对非指标表left-join
+component_sql="""select
+    field1, field2
+    from table1 a
+    where 1=1 ${auto_param} &{auto_auth} &{dimension} &{order_key}
+"""
+
+head=""
+page=true
+multi_row=false
+result_add_map=[
+
+]
+
+compound_metrics_map = [
+
+]
+
+data_condition=[
+
+]
+
+enable=true
+
+[[andromeda.map.business]]
+business="test"
+scene="test"
+desc="desc"
+task_type="SQL"
+
+scene_request_key=[
+    {key="a", map_key="a", opt="=", data_type="String"}
+]
+
+table=[
+    {table_name="a", alias_name="", desc="desc", isSeq=false}
+]
+
+components=[
+    {componentId="test"}
+]
+
+data_auth_level="权限级别，用字符串"

@@ -1,0 +1,149 @@
+# this is a TOML document
+title = "指标配置文件"
+[owner]
+create_date = "2022-05-04"
+doc = """指标配置文件"""
+
+[[andromeda.metrics.functions]]
+function_name = "Sub"
+function_desc = "减法"
+function_express = "A-B"
+function_param_size = 2
+function_param_test = [
+    {test_key = "1", test_param = [1.0, 10.0], test_aim = "0.1"},
+    {test_key = "2", test_param = [2.0, 10.0], test_aim = "0.2"},
+    {test_key = "3", test_param = [1.0, 0.0], test_aim = "0.0"},
+]
+enable = true
+
+[[andromeda.metrics.functions]]
+function_name = "Rate"
+function_desc = "比率"
+function_express = "B==0?0.0:A/B *100"
+function_param_size = 2
+function_param_test = [
+    {test_key = "1", test_param = [1.0, 10.0], test_aim = "0.1"},
+    {test_key = "2", test_param = [2.0, 10.0], test_aim = "0.2"},
+    {test_key = "3", test_param = [1.0, 0.0], test_aim = "0.0"},
+]
+enable = true
+
+[[andromeda.metrics.functions]]
+function_name = "DayWeekRate"
+function_desc = "比率"
+function_express = "B==0?0.0:(A-B)/B*100"
+function_param_size = 2
+function_param_test = [
+    {test_key = "1", test_param = [1.0, 10.0], test_aim = "0.1"},
+    {test_key = "2", test_param = [2.0, 10.0], test_aim = "0.2"},
+    {test_key = "3", test_param = [1.0, 0.0], test_aim = "0.0"},
+]
+enable = true
+
+[[andromeda.metrics.functions]]
+function_name = "RateValue"
+function_desc = "比值"
+function_express = "B==0?0.0:A/B"
+function_param_size = 2
+function_param_test = [
+    {test_key = "1", test_param = [1.0, 10.0], test_aim = "0.1"},
+    {test_key = "2", test_param = [2.0, 10.0], test_aim = "0.2"},
+    {test_key = "3", test_param = [1.0, 0.0], test_aim = "0.0"},
+]
+enable = true
+
+[[andromeda.metrics.functions]]
+function_name = "RateDiff"
+function_desc = "比率"
+function_express = "if b==0 { if d==0 {return 0.0;} else {return -c/d * 100;}} else {if d==0 {return 0.0;} else {return (a/b-c/d) * 100;}}"
+function_param_size = 4
+function_param_test = [
+    {test_key = "1", test_param = [2.0, 10.0, 1.0, 10.0], test_aim = 0.1},
+    {test_key = "2", test_param = [2.0, 0.0, 1.0, 10.0], test_aim = -0.1},
+    {test_key = "3", test_param = [2.0, 0.0, 1.0, 0.0], test_aim = 0.0},
+]
+enable = true
+
+[[andromeda.metrics.functions]]
+function_name = "RateDiffDivide"
+function_desc = "(a/b)/(c/d)*100"
+function_express = "if b==0 { if d==0 {return 0.0;} else {return c/d * 100;}} else {if d==0 {return 0.0;} else {return (a/b)/(c/d) * 100;}}"
+function_param_size = 4
+function_param_test = [
+    {test_key = "1", test_param = [2.0, 10.0, 1.0, 10.0], test_aim = 0.1},
+    {test_key = "2", test_param = [2.0, 0.0, 1.0, 10.0], test_aim = -0.1},
+    {test_key = "3", test_param = [2.0, 0.0, 1.0, 0.0], test_aim = 0.0},
+]
+enable = true
+
+# 毛利率-月同比 单均补贴-月同比
+[[andromeda.metrics.functions]]
+function_name = "RateGrossProfitOrAvgSubsidies"
+function_desc = "比率"
+function_express = "if b==0 { if d==0 {return 0.0;} else {if c==0 {return 0.0;} else {return (c/d)/(c/d)*100;}}} else {if d==0 {return 0.0;} else {if c==0 {return 0.0;} else {return (a/b-c/d)/(c/d)*100;}}}"
+function_param_size = 4
+function_param_test = [
+    {test_key = "1", test_param = [100.0, 10.0, 100.0, 10.0], test_aim = 1},
+    {test_key = "2", test_param = [100.0, 10.0, 100.0, 10.0], test_aim = 1},
+    {test_key = "3", test_param = [100.0, 10.0, 100.0, 10.0], test_aim = 1},
+]
+enable = true
+
+[[andromeda.metrics.functions]]
+function_name = "DayWeekRateDiff"
+function_desc = "比率"
+function_express = "if b==0 { if d==0 {return 0.0;} else {return -c/d;}} else {if d==0 {return 0.0;} else {if c==0 {return 0.0;} else {return (a/b-c/d)/(c/d);}}}"
+function_param_size = 4
+function_param_test = [
+    {test_key = "1", test_param = [2.0, 10.0, 1.0, 10.0], test_aim = 0.1},
+    {test_key = "2", test_param = [2.0, 0.0, 1.0, 10.0], test_aim = -0.1},
+    {test_key = "3", test_param = [2.0, 0.0, 1.0, 0.0], test_aim = 0.0},
+]
+enable = true
+
+[[andromeda.metrics.functions]]
+function_name = "RateSub"
+function_desc = "同比环比相减"
+function_express = "if b==0 { if d==0 {return 0.0;} else {return -c/d * 100;}} else {if d==0 {return 0.0;} else {return (a/b-c/d);}}"
+function_param_size = 4
+function_param_test = [
+    {test_key = "1", test_param = [2.0, 10.0, 1.0, 10.0], test_aim = 0.1},
+    {test_key = "2", test_param = [2.0, 0.0, 1.0, 10.0], test_aim = -0.1},
+    {test_key = "3", test_param = [2.0, 0.0, 1.0, 0.0], test_aim = 0.0},
+]
+enable = true
+
+[[andromeda.metrics.functions]]
+function_name = "RateSubRadio"
+function_desc = "(((a/b)/(c/d))-((e/f)/(g/h))) * 100"
+function_express = "if a!=0 && b!=0 && c!=0 && d!=0 { if e!=0 && f!=0 && g!=0 && h!=0 {return (((a/b)/(c/d))-((e/f)/(g/h))) * 100;} else {return ((a/b)/(c/d)) * 100;}} else {if e!=0 && f!=0 && g!=0 && h!=0 {return -((e/f)/(g/h)) * 100;} else {return 0.0;}}"
+function_param_size = 8
+function_param_test = [
+    {test_key = "1", test_param = [2.0, 10.0, 1.0, 10.0, 2.0, 10.0, 1.0, 10.0], test_aim = 0.1},
+    {test_key = "2", test_param = [2.0, 0.0, 1.0, 10.0, 2.0, 10.0, 1.0, 10.0], test_aim = -0.1},
+]
+enable = true
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
